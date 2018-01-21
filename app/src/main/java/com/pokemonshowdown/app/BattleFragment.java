@@ -1269,11 +1269,13 @@ public class BattleFragment extends Fragment {
         if (!special) {
             return teamName.indexOf(pkm);
         } else {
-            for (int i = 0; i < teamName.size(); i++) {
-                if (teamName.get(i).contains(species)) {
-                    return i;
-                }
-            }
+//            for (int i = 0; i < teamName.size(); i++) {
+//                Log.i("TTValidate",teamName.get(i));
+//                if (teamName.get(i).contains(species)) {
+//                    Log.i("species","came to loop");
+//                    return i;
+//                }
+//            }
             return -1;
         }
     }
