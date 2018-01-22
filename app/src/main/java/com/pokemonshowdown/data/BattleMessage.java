@@ -238,27 +238,25 @@ public class BattleMessage {
                 iconId = battleFragment.getIconId(playerType, team.size());
                 pokemonInfo = new PokemonInfo(battleFragment.getActivity(), pokeName);
                 processPokemonDetailString(pokemonInfo, split[1]);
-                if (battleFragment.findPokemonInTeam(team,
-                        pokemonInfo.getName()) == -1) {
-                    team.add(pokemonInfo);
 
-                    battleFragment.getActivity().runOnUiThread(new RunWithNet() {
-                        @Override
-                        public void runWithNet() {
-                            int imageResource = Pokemon.getPokemonIcon(battleFragment.getActivity(),
-                                    MyApplication.toId(pokeName));
-                            if (battleFragment.getView() == null) {
-                                viewData.addViewSetterOnHold(iconId, imageResource,
-                                        BattleFieldData.ViewData.SetterType.IMAGEVIEW_SETIMAGERESOURCE);
-                            } else {
-                                ImageView icon = (ImageView) battleFragment.getView().findViewById(iconId);
-                                if (icon != null) {
-                                    icon.setImageResource(imageResource);
-                                }
+                team.add(pokemonInfo);
+
+                battleFragment.getActivity().runOnUiThread(new RunWithNet() {
+                    @Override
+                    public void runWithNet() {
+                        int imageResource = Pokemon.getPokemonIcon(battleFragment.getActivity(),
+                                MyApplication.toId(pokeName));
+                        if (battleFragment.getView() == null) {
+                            viewData.addViewSetterOnHold(iconId, imageResource,
+                                    BattleFieldData.ViewData.SetterType.IMAGEVIEW_SETIMAGERESOURCE);
+                        } else {
+                            ImageView icon = (ImageView) battleFragment.getView().findViewById(iconId);
+                            if (icon != null) {
+                                icon.setImageResource(imageResource);
                             }
                         }
-                    });
-                }
+                    }
+                });
                 break;
 
             case "teampreview":
