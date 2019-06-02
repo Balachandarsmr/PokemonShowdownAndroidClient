@@ -42,5 +42,5 @@ deploy:
   on:
     branch: master
     repo: Balachandarsmr/PokemonShowdownAndroidClient
-    tags: true
+    tags: false
     rvm: 2.0.0
