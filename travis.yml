@@ -1,0 +1,42 @@
+sudo: false
+
+language: android
+jdk: oraclejdk8
+dist: precise
+
+android:
+  components:
+  - tools
+  - build-tools-24.0.0
+  - android-24
+  - extra-android-m2repository
+
+before_install:
+- chmod +x gradlew
+
+script:
+- ./gradlew build assembleRelease
+
+before_deploy:
+
+- cp $TRAVIS_BUILD_DIR/keystore.jks $HOME
+
+- cd app/build/outputs/apk/
+
+- jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $HOME/keystore.jks -storepass showdown -keypass showdown app-release-unsigned.apk smogon
+
+
+# Verification
+
+- jarsigner -verify app-release-unsigned.apk
+
+- "${ANDROID_HOME}/build-tools/24.0.0/zipalign -v 4 app-release-unsigned.apk showdown.apk"
+
+
+deploy:
+  provider: releases
+  api_key:
+    secure: nrm5PSax1lVgv84+orDyQ9mKgQ6KOojhlKx3hR9bwV/ddDRA9xPsP/nTovwwfw7GhEHSqSsc3qH3M3dwvJSgTEG1IjvRYt/rlXqkJ9lB1X+tc0k4bi1ZRyNCWX/NYQ6WONBxLg4sVf9d1JTUFbTveHC/J8ist+Guy+v0wZkaLLbl6KrOMgnzpNx0gxuWTt+Y+pNSOHC7EoJpJ21sUKvRrqjaqRxJXWnDHcgAYcEL2ROLWzGCIE0cBFl6VVpf/OXpej+u3cl1MQoKc9HfHHjq4jb6UmropGyJZ6ETtwZwiwo1S5U7wjExDPjeldpT/0AqQwuh3/gQ7NMChWznZ0GWjXSr6qweiHLyYsp8xMiuZ7NO2rANTKFsB52a18SqEw66rOCTcR5OnE/1ruUPowARB7siVTVXMkjLLV1v6vUCkDJjxC8VRG6xbPe4JI4kCZ+VieIuHXBcVuyRQ1rvO7j/imBzDJMyLCMzZ1rYLPY8xC1TT0sB7vCORL73yP6QThxrigqT3oClCy8Flz2sl1s18t7JLejYMIBi5n1Bh9ra5sREThoLDsXzdedF/GeUOoeN52+QVoiFkfl8f9ZgZFfgOyRHE3e2t65adVrvc/txV7aJi2trhDPdLyNDA5xCjl/fnrGnFm+WIip3NdSHzgFPUcn1rFylqI6pvofTtfPprqo=
+  file: showdown.apk
+  skip_cleanup: true
+  rvm: 2.0.0
