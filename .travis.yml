@@ -40,7 +40,7 @@ deploy:
   file: showdown.apk
   skip_cleanup: true
   on:
-    branch: master
+    all_branches: true
     repo: Balachandarsmr/PokemonShowdownAndroidClient
     tags: false
     rvm: 2.0.0
