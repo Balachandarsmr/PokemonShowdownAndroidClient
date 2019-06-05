@@ -200,9 +200,10 @@ public class MyApplication extends Application {
                     break;
                 case "updateuser":
                     channel = -1;
-                    String username = messageDetail.substring(0, messageDetail.indexOf('|'));
-                    String guestStatus = messageDetail.substring(messageDetail.indexOf('|') + 1, messageDetail.lastIndexOf('|'));
-                    String avatar = messageDetail.substring(messageDetail.lastIndexOf('|') + 1);
+                    String[] strList = messageDetail.split("\\|");
+                    String username = strList[0];
+                    String guestStatus = strList[1];
+                    String avatar = strList[2];
                     if (avatar.length() == 1) {
                         avatar = "00" + avatar;
                     } else {
