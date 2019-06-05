@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class SignInDialog extends DialogFragment {
                 if (!password.equals("")) {
                     Onboarding onboarding = Onboarding.get(getActivity().getApplicationContext());
                     String assertion = onboarding.signingIn(username, password);
+                    Log.i("Assertion",assertion);
                     if (assertion == null) {
                         getDialog().dismiss();
                         AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
