@@ -217,7 +217,7 @@ public class MyApplication extends Application {
                         onboarding.setAvatar(avatar);
                     } else {
                         onboarding.setUsername(username);
-                        onboarding.setSignedIn(false);
+                        onboarding.setSignedIn(true);
                         onboarding.setAvatar(avatar);
 
                         BroadcastSender.get(this).sendBroadcastFromMyApplication(
