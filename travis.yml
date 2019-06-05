@@ -1,0 +1,45 @@
+sudo: false
+
+language: android
+jdk: oraclejdk8
+dist: precise
+
+android:
+  components:
+  - tools
+  - build-tools-24.0.0
+  - android-24
+  - extra-android-m2repository
+
+before_install:
+- chmod +x gradlew
+
+script:
+- ./gradlew build assembleRelease
+
+before_deploy:
+
+- cp $TRAVIS_BUILD_DIR/keystore.jks $HOME
+
+- cd app/build/outputs/apk/
+
+- jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $HOME/keystore.jks -storepass showdown -keypass showdown app-release-unsigned.apk smogon
+
+
+# Verification
+
+- jarsigner -verify app-release-unsigned.apk
+
+- "${ANDROID_HOME}/build-tools/24.0.0/zipalign -v 4 app-release-unsigned.apk showdown.apk"
+
+
+deploy:
+  provider: releases
+  api_key:
+    secure: F7oa5+HYyLgbDesUPEqp32f9IX7YzUua4x3JW3y/RHEuHgI2SFrC40YhwC9JpdBGjP/SPU3ZaJNuM3YUP7R+Tyf1Fm0XmNzIGeU2EfVTuLEVTKO+GPVmcSmaXkazR4tQqk02apt+3MDgcT21WsJXpMmhrDO3vsGFOFVTWrJ1eLU9vA31BAYXnM6fI71HxPSs9C7oOqUDrrGkt+zYqx1XqzjnLaOO6mMCVq6+gE80XYoUPtXTkaa8hanlGUrJ6yejEeZK9i6Esz6IpuKZsG1DAejMZclCCZJoRobbMPZdTRQNJ4DZj8x1bbXvq277JvdYyUDUKU0iDeME5FLtSUZfSuyS6kC2GADZCqlQyqGvtrnbzmMdFe30T5VPdeDq2yMSuTK0KUzdwzaMlaw0aRso++P2zLY7izTlfyeRUm+o8gs139kTOrY1Tp5UPq8wQXEP1iF6ypNE8xG6tJzT/veZVNmnhEh6FcXIueORRcABPwU9rng9fcez9zC3GWmH7VIA8aD1Z58P98IkdJffEOBuFotmNBalB7xMWixDsvF5I+w+zTmry9aZLXDljCRoT4LDG2iX7r08FUeScw30xI4HqXuIC7zmvPxXDyvdNVGS+sdQap+r6V1sHxgMP0JYW6QHekbXMc7GhGPiNFkcvs8LQ3FmpH7JT/a6wrXYf63nXEw=
+  file: showdown.apk
+  skip_cleanup: true
+  on:
+    branch: master
+    repo: Balachandarsmr/PokemonShowdownAndroidClient
+    tags: true
